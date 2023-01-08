@@ -8,8 +8,13 @@ import com.example.shoplist.domain.ShopItem
 object ShopListRepositoryImpl : Repository {
 
     private val shopList = mutableListOf<ShopItem>()
-    private var autoIncrementID = 0
     private val shopListLD = MutableLiveData<List<ShopItem>>()
+    private var autoIncrementID = 0
+
+    private fun updateList(){
+        shopListLD.value = shopList.toList()
+    }
+
 
     override fun getShopItemList(): LiveData<List<ShopItem>>{
         return shopListLD
@@ -36,11 +41,7 @@ object ShopListRepositoryImpl : Repository {
     override fun editShopItem(shopItem: ShopItem) {
         val oldElement = getShopItem(shopItem.id)
         shopList.remove(oldElement)
-        addShopItem(shopItem)
-        updateList()  //Обновление уже делатся в методе добавления, можно не париться
+        addShopItem(shopItem) //Обновление уже делается в методе удаления и добавления, можно не париться
     }
 
-    private fun updateList(){
-        shopListLD.value = shopList.toList()
-    }
 }
