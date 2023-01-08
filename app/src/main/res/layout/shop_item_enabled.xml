@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:textSize="16sp"
             android:fontFamily="times"
             android:textColor="@color/black"
             tools:text="Картошка" />
@@ -31,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:textSize="14sp"
             android:textAlignment="textEnd"
             android:paddingEnd="6dp"
             android:paddingStart="6dp"
