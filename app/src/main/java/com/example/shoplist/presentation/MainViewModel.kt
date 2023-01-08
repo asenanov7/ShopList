@@ -6,9 +6,16 @@ import com.example.shoplist.domain.EditShopItemUseCase
 import com.example.shoplist.domain.GetShopItemListUseCase
 import com.example.shoplist.domain.RemoveShopItemUseCase
 import com.example.shoplist.domain.ShopItem
+import kotlin.random.Random
 
 class MainViewModel:ViewModel() {
     private val repository = ShopListRepositoryImpl
+    //delete this init block
+    init {
+        for (i in 1..100){
+            ShopListRepositoryImpl.addShopItem(ShopItem("$i", i, Random.nextBoolean()))
+        }
+    }
 
     private val getShopItemListUseCase = GetShopItemListUseCase(repository)
     private val removeShopItemUseCase = RemoveShopItemUseCase(repository)

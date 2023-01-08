@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.shoplist.domain.Repository
 import com.example.shoplist.domain.ShopItem
+import kotlin.random.Random
 
 object ShopListRepositoryImpl : Repository {
 
-    private val shopList = mutableListOf<ShopItem>()
+    private val shopList = sortedSetOf<ShopItem>({o1, o2 -> o1.id.compareTo(o2.id)})
     private val shopListLD = MutableLiveData<List<ShopItem>>()
     private var autoIncrementID = 0
+
 
     private fun updateList(){
         shopListLD.value = shopList.toList()
@@ -43,5 +45,6 @@ object ShopListRepositoryImpl : Repository {
         shopList.remove(oldElement)
         addShopItem(shopItem) //Обновление уже делается в методе удаления и добавления, можно не париться
     }
+
 
 }
