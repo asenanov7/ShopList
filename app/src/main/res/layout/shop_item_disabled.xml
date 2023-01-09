@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:background="@color/purple_200"
         android:alpha="0.5"
+        android:padding="8dp"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
 
@@ -33,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textAlignment="textEnd"
             android:paddingEnd="6dp"
             android:paddingStart="6dp"
