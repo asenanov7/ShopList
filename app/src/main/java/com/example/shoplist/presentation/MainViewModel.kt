@@ -10,16 +10,18 @@ import kotlin.random.Random
 
 class MainViewModel:ViewModel() {
     private val repository = ShopListRepositoryImpl
+
     //delete this init block
     init {
         for (i in 1..100){
             ShopListRepositoryImpl.addShopItem(ShopItem("$i", i, Random.nextBoolean()))
         }
-    }
+    }//
 
     private val getShopItemListUseCase = GetShopItemListUseCase(repository)
     private val removeShopItemUseCase = RemoveShopItemUseCase(repository)
     private val editShopItemUseCase = EditShopItemUseCase(repository)
+
 
     val shopList = getShopItemListUseCase.getShopItemList()
 
@@ -27,7 +29,11 @@ class MainViewModel:ViewModel() {
         removeShopItemUseCase.removeShopItem(shopItem)
     }
 
-    fun editStateItem(shopItem: ShopItem) {
+    fun editShopItem(shopItem:ShopItem) {
+       return editShopItemUseCase.editShopItem(shopItem)
+    }
+
+    fun editEnableState(shopItem: ShopItem) {
         val shopItemEnableChange = shopItem.copy(enabled = !shopItem.enabled)
         editShopItemUseCase.editShopItem(shopItemEnableChange)
     }
