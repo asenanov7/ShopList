@@ -1,4 +1,4 @@
-package com.example.shoplist.presentation
+package com.example.shoplist.presentation.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,24 +6,30 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.presentation.ShopItemAdapter
+import com.example.shoplist.presentation.viewmodels.MainViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: ShopItemAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var fab:FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRecycler()
+
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
             adapter.submitList(it)
         }
 
-        setupClickListeners()
+        setupClickListenersAndInitFab()
         setupSwipeListener()
     }
+
 
     private fun setupRecycler() {
         recyclerView = findViewById(R.id.rvShopItems)
@@ -41,12 +47,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupClickListeners() {
+    private fun setupClickListenersAndInitFab() {
+        fab = findViewById(R.id.fab)
+
         adapter.onItemLongClickListener = {
             viewModel.editEnableState(it)
         }
         adapter.onItemClickListener = {
-            viewModel.editShopItem(it)
+            startActivity(ShopItemActivity.newIntentEditMode(this,it.id))
+        }
+
+        fab.setOnClickListener{
+            startActivity(ShopItemActivity.newIntentAddingMode(this))
         }
 
     }
