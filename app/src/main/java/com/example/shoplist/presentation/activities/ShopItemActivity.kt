@@ -45,20 +45,20 @@ class ShopItemActivity : AppCompatActivity() {
         textInputEditTextName.doBeforeTextChanged{text, start, count, after -> textInputLayoutName.error=null }
         textInputEditTextCount.doBeforeTextChanged{text, start, count, after -> textInputLayoutCount.error=null }
 
-
     }
 
     private fun launchAddMode(){
-        shopItemViewModel.screenShouldBeFinishedLD.observe(this){ finish() }
         buttonSave.setOnClickListener {
             shopItemViewModel.addShopItem(
                 textInputEditTextName.text.toString(), textInputEditTextCount.text.toString())
         }
+
+        shopItemViewModel.screenShouldBeFinishedLD.observe(this){
+            finish()
+        }
     }
 
     private fun launchEditMode(){
-        shopItemViewModel.screenShouldBeFinishedLD.observe(this){ finish() }
-
         shopItemId = intent.getIntExtra(KEY_ID, UNDEFINED_ID)
 
        shopItemViewModel.getShopItem(shopItemId)
@@ -66,11 +66,15 @@ class ShopItemActivity : AppCompatActivity() {
             textInputEditTextName.setText(it.name)
             textInputEditTextCount.setText(it.count.toString())
         }
+
         buttonSave.setOnClickListener {
             shopItemViewModel.editShopItem(
                 textInputEditTextName.text.toString(), textInputEditTextCount.text.toString())
         }
 
+        shopItemViewModel.screenShouldBeFinishedLD.observe(this){
+            finish()
+        }
     }
 
     private fun initViews() {
