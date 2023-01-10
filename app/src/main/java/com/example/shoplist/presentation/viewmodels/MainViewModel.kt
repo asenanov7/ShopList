@@ -1,4 +1,4 @@
-package com.example.shoplist.presentation
+package com.example.shoplist.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.example.shoplist.data.ShopListRepositoryImpl
@@ -14,7 +14,7 @@ class MainViewModel:ViewModel() {
 
     //delete this init block
     init {
-        for (i in 1..100){
+        for (i in 1..10){
             ShopListRepositoryImpl.addShopItem(ShopItem("$i", i, Random.nextBoolean()))
         }
     }
@@ -29,10 +29,6 @@ class MainViewModel:ViewModel() {
 
     fun removeItem(shopItem: ShopItem){
         removeShopItemUseCase.removeShopItem(shopItem)
-    }
-
-    fun editShopItem(shopItem:ShopItem) {
-       return editShopItemUseCase.editShopItem(shopItem)
     }
 
     fun editEnableState(shopItem: ShopItem) {
