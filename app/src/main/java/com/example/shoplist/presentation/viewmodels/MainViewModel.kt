@@ -12,13 +12,6 @@ class MainViewModel:ViewModel() {
     //Правильнее через даггер, это не клин. Потому что presentation слой не должен знать о data
     private val repository = ShopListRepositoryImpl
 
-    //delete this init block
-    init {
-        for (i in 1..10){
-            ShopListRepositoryImpl.addShopItem(ShopItem("$i", i, Random.nextBoolean()))
-        }
-    }
-    //
 
     private val getShopItemListUseCase = GetShopItemListUseCase(repository)
     private val removeShopItemUseCase = RemoveShopItemUseCase(repository)
