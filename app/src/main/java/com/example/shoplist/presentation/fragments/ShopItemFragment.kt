@@ -122,7 +122,14 @@ class ShopItemFragment:Fragment() {
         private const val KEY_ID = "id_key"
 
         fun newInstanceAdd(): ShopItemFragment{
-            return ShopItemFragment().apply {
+            /*
+            val args = Bundle()
+            args.putString(KEY_MODE, ADDING_MODE)
+            val fragment = ShopItemFragment()
+            fragment.arguments = args
+            return fragment
+            */
+            return ShopItemFragment().apply {     //Верни фрагмент, у которого аргументы равны Бандлу, с положенным значением по ключу KEY_MODE
                 arguments = Bundle().apply {
                     putString(KEY_MODE, ADDING_MODE)
                 }

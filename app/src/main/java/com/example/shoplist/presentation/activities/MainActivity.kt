@@ -1,35 +1,85 @@
 package com.example.shoplist.presentation.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.recycler.ShopItemAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentListener {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: ShopItemAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var fab:FloatingActionButton
+    private var fragmentContainerViewMain: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         setupRecycler()
+        setupSwipeListener()
+        setupLongClickListener()
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this) {
             adapter.submitList(it)
         }
 
-        setupClickListenersAndInitFab()
-        setupSwipeListener()
+        fragmentContainerViewMain = findViewById(R.id.fragmentContainerViewMain)
+
+        fab = findViewById(R.id.fab)
+        if (isLand()){
+            adapter.onItemClickListener = {
+                launchEditFragment(it.id)
+            }
+
+            fab.setOnClickListener {
+                launchAddFragment()
+            }
+
+        }else{
+            adapter.onItemClickListener = {
+                startActivity(ShopItemActivity.newIntentEditMode(this,it.id))
+            }
+
+            fab.setOnClickListener{
+                startActivity(ShopItemActivity.newIntentAddingMode(this))
+            }
+        }
+
+    }
+    private fun launchAddFragment(){
+        val fragment = ShopItemFragment.newInstanceAdd()
+
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerViewMain, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
+    private fun launchEditFragment(shopItemId:Int){
+        val fragment = ShopItemFragment.newInstanceEdit(shopItemId)
+
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainerViewMain, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun isLand():Boolean{
+        return fragmentContainerViewMain!=null
+    }
 
     private fun setupRecycler() {
         recyclerView = findViewById(R.id.rvShopItems)
@@ -47,20 +97,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupClickListenersAndInitFab() {
-        fab = findViewById(R.id.fab)
-
+    private fun setupLongClickListener(){
         adapter.onItemLongClickListener = {
             viewModel.editEnableState(it)
         }
-        adapter.onItemClickListener = {
-            startActivity(ShopItemActivity.newIntentEditMode(this,it.id))
-        }
-
-        fab.setOnClickListener{
-            startActivity(ShopItemActivity.newIntentAddingMode(this))
-        }
-
     }
 
     private fun setupSwipeListener() {
@@ -78,6 +118,11 @@ class MainActivity : AppCompatActivity() {
         }
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    override fun shouldCloseFragment() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 
 }
