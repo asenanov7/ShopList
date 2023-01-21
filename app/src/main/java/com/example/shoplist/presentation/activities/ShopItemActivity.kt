@@ -49,6 +49,7 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragme
             intent.putExtra(KEY_MODE, ADDING_MODE)
             return intent
         }
+
         fun newIntentEditMode(context: Context, ID: Int): Intent {
             val intent = Intent(context, ShopItemActivity::class.java)
             intent.putExtra(KEY_MODE, EDIT_MODE)
