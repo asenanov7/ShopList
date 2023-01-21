@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
-import com.example.shoplist.presentation.ShopItemAdapter
+import com.example.shoplist.presentation.recycler.ShopItemAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
