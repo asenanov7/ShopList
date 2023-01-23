@@ -1,7 +1,7 @@
 package com.example.shoplist.presentation.activities
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         val fragment = ShopItemFragment.newInstanceAdd()
 
         supportFragmentManager.popBackStack()
+        //Без параметров метод popBackStack удаляяет последний фрагмент из бэкстека, а с параматрои имени и флага
+        //Удаляет все фрагменты до фрагменты с указанным именем(можно включительно удалить через флаги)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerViewMain, fragment)
             .addToBackStack(null)
@@ -79,6 +81,11 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
 
     private fun isLand():Boolean{
         return fragmentContainerViewMain!=null
+    }
+
+    override fun shouldCloseFragment() {
+        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 
     private fun setupRecycler() {
@@ -118,11 +125,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         }
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
-
-    override fun shouldCloseFragment() {
-        Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-        supportFragmentManager.popBackStack()
     }
 
 }

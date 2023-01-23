@@ -10,12 +10,13 @@ import com.example.shoplist.domain.ShopItem.Companion.UNDEFINED_ID
 import com.example.shoplist.presentation.fragments.ShopItemFragment
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentListener {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item_actvity)
 
-        launchFragment()
+        if (savedInstanceState == null) {
+            launchFragment()
+        }
     }
 
     private fun launchFragment(){
@@ -25,10 +26,8 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragme
             else -> throw Exception("Unknown mode")
         }
 
-        supportFragmentManager.popBackStack()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerViewShopItemActivity, fragment)
-            .addToBackStack(null)
             .commit()
     }
 

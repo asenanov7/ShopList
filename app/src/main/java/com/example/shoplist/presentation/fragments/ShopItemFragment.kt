@@ -2,6 +2,7 @@ package com.example.shoplist.presentation.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ class ShopItemFragment:Fragment() {
     interface ShouldCloseFragmentListener{
         fun shouldCloseFragment()
     }
-    private lateinit var shouldCloseFragmentBridge:ShouldCloseFragmentListener
+    private lateinit var shouldCloseFragmentBridge : ShouldCloseFragmentListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,6 +42,7 @@ class ShopItemFragment:Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("lesson", "onCreate")
         super.onCreate(savedInstanceState)
 
         screedMode = arguments?.getString(KEY_MODE)
