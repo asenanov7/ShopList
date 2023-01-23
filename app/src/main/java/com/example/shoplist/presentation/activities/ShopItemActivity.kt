@@ -3,6 +3,7 @@ package com.example.shoplist.presentation.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shoplist.R
@@ -14,22 +15,22 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragme
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item_actvity)
 
-        if (savedInstanceState == null) {
-            launchFragment()
-        }
+         if (savedInstanceState == null) {
+             launchFragment()
+          }
     }
 
-    private fun launchFragment(){
-        val fragment = when(intent.getStringExtra(KEY_MODE)){
-            ADDING_MODE -> ShopItemFragment.newInstanceAdd()
-            EDIT_MODE -> ShopItemFragment.newInstanceEdit(intent.getIntExtra(KEY_ID, UNDEFINED_ID))
-            else -> throw Exception("Unknown mode")
-        }
+      private fun launchFragment(){
+          val fragment = when(intent.getStringExtra(KEY_MODE)){
+              ADDING_MODE -> ShopItemFragment.newInstanceAdd()
+              EDIT_MODE -> ShopItemFragment.newInstanceEdit(intent.getIntExtra(KEY_ID, UNDEFINED_ID))
+              else -> throw Exception("Unknown mode")
+          }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerViewShopItemActivity, fragment)
-            .commit()
-    }
+          supportFragmentManager.beginTransaction()
+             .replace(R.id.fragmentContainerViewShopItemActivity, fragment)
+              .commit()
+     }
 
     override fun shouldCloseFragment() {
         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
