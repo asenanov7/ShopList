@@ -39,22 +39,12 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
 
         fab = findViewById(R.id.fab)
         if (isLand()){
-            adapter.onItemClickListener = {
-                launchEditFragment(it.id)
-            }
-
-            fab.setOnClickListener {
-                launchAddFragment()
-            }
+            adapter.onItemClickListener = { launchEditFragment(it.id) }
+            fab.setOnClickListener { launchAddFragment() }
 
         }else{
-            adapter.onItemClickListener = {
-                startActivity(ShopItemActivity.newIntentEditMode(this,it.id))
-            }
-
-            fab.setOnClickListener{
-                startActivity(ShopItemActivity.newIntentAddingMode(this))
-            }
+            adapter.onItemClickListener = { startActivity(ShopItemActivity.newIntentEditMode(this,it.id)) }
+            fab.setOnClickListener{ startActivity(ShopItemActivity.newIntentAddingMode(this)) }
         }
 
     }
@@ -62,7 +52,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         val fragment = ShopItemFragment.newInstanceAdd()
 
         supportFragmentManager.popBackStack()
-        //Без параметров метод popBackStack удаляяет последний фрагмент из бэкстека, а с параматрои имени и флага
+        //Без параметров метод popBackStack удаляет последний фрагмент из бэкстека, а с параматрои имени и флага
         //Удаляет все фрагменты до фрагменты с указанным именем(можно включительно удалить через флаги)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainerViewMain, fragment)
@@ -94,14 +84,8 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         adapter = ShopItemAdapter()
         recyclerView.adapter = adapter
         with(recyclerView) {
-            recycledViewPool.setMaxRecycledViews(
-                R.layout.shop_item_disabled,
-                ShopItemAdapter.MAX_POOL_SIZE
-            )
-            recycledViewPool.setMaxRecycledViews(
-                R.layout.shop_item_enabled,
-                ShopItemAdapter.MAX_POOL_SIZE
-            )
+            recycledViewPool.setMaxRecycledViews(R.layout.shop_item_disabled, ShopItemAdapter.MAX_POOL_SIZE)
+            recycledViewPool.setMaxRecycledViews(R.layout.shop_item_enabled, ShopItemAdapter.MAX_POOL_SIZE)
         }
     }
 
