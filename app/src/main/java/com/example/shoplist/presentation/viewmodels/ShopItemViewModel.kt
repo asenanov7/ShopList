@@ -1,17 +1,24 @@
 package com.example.shoplist.presentation.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.shoplist.data.ShopListRepositoryImpl
 import com.example.shoplist.domain.AddShopItemUseCase
 import com.example.shoplist.domain.EditShopItemUseCase
 import com.example.shoplist.domain.GetShopItemUseCase
 import com.example.shoplist.domain.ShopItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
-class ShopItemViewModel : ViewModel() {
+class ShopItemViewModel(application:Application) : AndroidViewModel(application) {
 
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
+
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     private val getShopItemUseCase = GetShopItemUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
@@ -36,17 +43,22 @@ class ShopItemViewModel : ViewModel() {
 
 
     fun getShopItem(shopItemID: Int) {
-        _shopItemLD.value = getShopItemUseCase.getShopItem(shopItemID)
+        scope.launch {
+            _shopItemLD.value = getShopItemUseCase.getShopItem(shopItemID)
+        }
     }
 
     fun addShopItem(name: String?, count: String?) {
-        val nameChecked = name?.trim() ?: ""
-        val countChecked = count?.trim()?.toIntOrNull() ?: 0
 
-        if (validateInput(nameChecked, countChecked)) {
-            val shopItem = ShopItem(nameChecked, countChecked, true)
-            addShopItemUseCase.addShopItem(shopItem)
-            _screenShouldBeFinishedLD.value = Unit
+            val nameChecked = name?.trim() ?: ""
+            val countChecked = count?.trim()?.toIntOrNull() ?: 0
+
+            if (validateInput(nameChecked, countChecked)) {
+                scope.launch {
+                val shopItem = ShopItem(name = nameChecked, count = countChecked, enabled = true)
+                addShopItemUseCase.addShopItem(shopItem)
+                _screenShouldBeFinishedLD.value = Unit
+            }
         }
     }
 
@@ -55,11 +67,13 @@ class ShopItemViewModel : ViewModel() {
         val countChecked = count?.trim()?.toIntOrNull() ?: 0
 
         if (validateInput(nameChecked, countChecked)) {
+            scope.launch {
             _shopItemLD.value?.let {
                 val newShopItem = it.copy(name = nameChecked, count = countChecked)
                 editShopItemUseCase.editShopItem(newShopItem)
                 _screenShouldBeFinishedLD.value = Unit
             }
+        }
         }
     }
 

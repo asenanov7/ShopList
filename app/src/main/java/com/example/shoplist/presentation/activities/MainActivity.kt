@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        File(cacheDir, "tfs.txt").createNewFile()
-
         setupRecycler()
         setupSwipeListener()
         setupLongClickListener()
