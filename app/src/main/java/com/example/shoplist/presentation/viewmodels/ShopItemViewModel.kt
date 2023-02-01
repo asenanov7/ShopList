@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.shoplist.data.ShopListRepositoryImpl
 import com.example.shoplist.domain.AddShopItemUseCase
 import com.example.shoplist.domain.EditShopItemUseCase
@@ -17,8 +18,6 @@ import kotlinx.coroutines.launch
 class ShopItemViewModel(application:Application) : AndroidViewModel(application) {
 
     private val repository = ShopListRepositoryImpl(application)
-
-    private val scope = CoroutineScope(Dispatchers.Main)
 
     private val getShopItemUseCase = GetShopItemUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
@@ -43,7 +42,7 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
 
 
     fun getShopItem(shopItemID: Int) {
-        scope.launch {
+        viewModelScope.launch {
             _shopItemLD.value = getShopItemUseCase.getShopItem(shopItemID)
         }
     }
@@ -54,7 +53,7 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
             val countChecked = count?.trim()?.toIntOrNull() ?: 0
 
             if (validateInput(nameChecked, countChecked)) {
-                scope.launch {
+                viewModelScope.launch {
                 val shopItem = ShopItem(name = nameChecked, count = countChecked, enabled = true)
                 addShopItemUseCase.addShopItem(shopItem)
                 _screenShouldBeFinishedLD.value = Unit
@@ -67,7 +66,7 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
         val countChecked = count?.trim()?.toIntOrNull() ?: 0
 
         if (validateInput(nameChecked, countChecked)) {
-            scope.launch {
+            viewModelScope.launch {
             _shopItemLD.value?.let {
                 val newShopItem = it.copy(name = nameChecked, count = countChecked)
                 editShopItemUseCase.editShopItem(newShopItem)

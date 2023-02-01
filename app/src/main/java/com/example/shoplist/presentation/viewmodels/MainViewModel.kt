@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.core.graphics.scaleMatrix
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.shoplist.data.ShopListRepositoryImpl
 import com.example.shoplist.domain.EditShopItemUseCase
 import com.example.shoplist.domain.GetShopItemListUseCase
@@ -19,8 +20,6 @@ class MainViewModel(application:Application): AndroidViewModel(application) {
     //Правильнее через даггер, это не клин. Потому что presentation слой не должен знать о data
     private val repository = ShopListRepositoryImpl(application)
 
-    private val scope = CoroutineScope(Dispatchers.Main)
-
     private val getShopItemListUseCase = GetShopItemListUseCase(repository)
     private val removeShopItemUseCase = RemoveShopItemUseCase(repository)
     private val editShopItemUseCase = EditShopItemUseCase(repository)
@@ -29,21 +28,16 @@ class MainViewModel(application:Application): AndroidViewModel(application) {
     val shopList = getShopItemListUseCase.getShopItemList()
 
     fun removeItem(shopItem: ShopItem){
-        scope.launch {
+        viewModelScope.launch {
             removeShopItemUseCase.removeShopItem(shopItem)
         }
     }
 
     fun editEnableState(shopItem: ShopItem) {
-        scope.launch {
+        viewModelScope.launch {
             val shopItemEnableChange = shopItem.copy(enabled = !shopItem.enabled)
             editShopItemUseCase.editShopItem(shopItemEnableChange)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
     }
 
 }
