@@ -13,6 +13,7 @@ import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.recycler.ShopItemAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentListener {
     private lateinit var viewModel: MainViewModel
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        File(cacheDir, "tfs.txt").createNewFile()
 
         setupRecycler()
         setupSwipeListener()
