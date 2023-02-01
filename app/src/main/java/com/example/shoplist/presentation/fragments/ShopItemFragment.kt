@@ -131,7 +131,7 @@ class ShopItemFragment:Fragment() {
             fragment.arguments = args
             return fragment
             */
-            return ShopItemFragment().apply {     //Верни фрагмент, у которого аргументы равны Бандлу, с положенным значением по ключу KEY_MODE
+            return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_MODE, ADDING_MODE)
                 }

@@ -26,9 +26,8 @@ class ShopItemActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragme
               EDIT_MODE -> ShopItemFragment.newInstanceEdit(intent.getIntExtra(KEY_ID, UNDEFINED_ID))
               else -> throw Exception("Unknown mode")
           }
-
           supportFragmentManager.beginTransaction()
-             .replace(R.id.fragmentContainerViewShopItemActivity, fragment)
+              .replace(R.id.fragmentContainerViewShopItemActivity, fragment)
               .commit()
      }
 

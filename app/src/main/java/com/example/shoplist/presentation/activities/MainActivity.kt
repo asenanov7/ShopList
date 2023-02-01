@@ -13,6 +13,7 @@ import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.recycler.ShopItemAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentListener {
     private lateinit var viewModel: MainViewModel
