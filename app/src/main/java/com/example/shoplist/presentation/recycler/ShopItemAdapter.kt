@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.shoplist.R
 import com.example.shoplist.domain.ShopItem
+import javax.inject.Inject
 
-class ShopItemAdapter() : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
+class ShopItemAdapter @Inject constructor() : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
     companion object{
         const val MAX_POOL_SIZE = 20
     }

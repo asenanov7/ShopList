@@ -1,7 +1,6 @@
 package com.example.shoplist.presentation.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
@@ -9,20 +8,35 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoplist.R
+import com.example.shoplist.component
 import com.example.shoplist.presentation.fragments.ShopItemFragment
 import com.example.shoplist.presentation.recycler.ShopItemAdapter
 import com.example.shoplist.presentation.viewmodels.MainViewModel
+import com.example.shoplist.presentation.viewmodels.ViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.File
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentListener {
-    private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: ShopItemAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var fab:FloatingActionButton
     private var fragmentContainerViewMain: FragmentContainerView? = null
 
+    private val subComponent by lazy {
+        component.getActivitySubComponent().create()
+    }
+
+    @Inject
+    lateinit var adapter: ShopItemAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val mainVM: MainViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        subComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -30,14 +44,13 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
         setupSwipeListener()
         setupLongClickListener()
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.shopList.observe(this) {
+        mainVM.shopList.observe(this) {
             adapter.submitList(it)
         }
 
         fragmentContainerViewMain = findViewById(R.id.fragmentContainerViewMain)
-
         fab = findViewById(R.id.fab)
+
         if (isLand()){
             adapter.onItemClickListener = { launchEditFragment(it.id) }
             fab.setOnClickListener { launchAddFragment() }
@@ -91,7 +104,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
 
     private fun setupLongClickListener(){
         adapter.onItemLongClickListener = {
-            viewModel.editEnableState(it)
+            mainVM.editEnableState(it)
         }
     }
 
@@ -103,8 +116,8 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.ShouldCloseFragmentLi
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = viewModel.shopList.value?.get(viewHolder.adapterPosition)      //currentList можно использовать
-                item?.let { viewModel.removeItem(it) }
+                val item = mainVM.shopList.value?.get(viewHolder.adapterPosition)      //currentList можно использовать
+                item?.let { mainVM.removeItem(it) }
             }
 
         }

@@ -41,6 +41,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1' //lifecycle activity
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1" //view-model Scope
 
+    implementation 'com.google.dagger:dagger:2.44'       //Dagger2
+    kapt 'com.google.dagger:dagger-compiler:2.44'
+
+
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
